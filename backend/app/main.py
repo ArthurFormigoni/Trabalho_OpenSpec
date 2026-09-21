@@ -1,4 +1,5 @@
 from contextlib import asynccontextmanager
+from hashlib import sha256
 
 from fastapi import Depends, FastAPI, File, HTTPException, UploadFile, status
 from fastapi.middleware.cors import CORSMiddleware
@@ -37,7 +38,7 @@ def to_response(image: StoredImage) -> ImageResponse:
         size_x=image.size_x,
         size_y=image.size_y,
         filesize_bytes=image.filesize_bytes,
-        image_url=f"/images/{image.id}/content",
+        image_url=f"/images/{image.id}/content?v={sha256(image.image_bytes).hexdigest()[:16]}",
     )
 
 
@@ -57,7 +58,11 @@ def get_image_content(image_id: int, db: Session = Depends(get_db)) -> Response:
     image = db.get(StoredImage, image_id)
     if image is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Imagem não encontrada")
-    return Response(content=image.image_bytes, media_type="image/avif")
+    return Response(
+        content=image.image_bytes,
+        media_type="image/avif",
+        headers={"Cache-Control": "no-store, max-age=0", "Pragma": "no-cache"},
+    )
 
 
 @app.post("/images", response_model=ImageResponse, status_code=status.HTTP_201_CREATED)
@@ -88,4 +93,3 @@ def delete_image(image_id: int, db: Session = Depends(get_db)) -> None:
         raise HTTPException(status_code=404, detail="Imagem não encontrada")
     db.delete(image)
     db.commit()
-

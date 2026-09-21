@@ -50,6 +50,7 @@ def test_upload_content_and_delete(client):
     content = client.get(payload["image_url"])
     assert content.status_code == 200
     assert content.headers["content-type"] == "image/avif"
+    assert "no-store" in content.headers["cache-control"]
 
     deleted = client.delete(f"/images/{payload['id']}")
     assert deleted.status_code == 204
