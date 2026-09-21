@@ -8,6 +8,8 @@ Galeria SPA com React/Vite, API FastAPI e PostgreSQL. Os uploads são validados 
 docker compose up --build
 ```
 
+Para usar o banco Aiven configurado localmente, copie `.env.sample` para `.env` e preencha `POSTGRES_PASSWORD`/`DATABASE_URL`. O arquivo `.env` não deve ser commitado.
+
 Abra <http://localhost:5173>. A API fica disponível em <http://localhost:8000/docs>.
 
 ## Desenvolvimento local
@@ -29,4 +31,3 @@ cd frontend
 npm install
 npm run dev
 ```
-
