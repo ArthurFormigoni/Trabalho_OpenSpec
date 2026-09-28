@@ -27,7 +27,7 @@ class Settings(BaseSettings):
 
     @property
     def ws_origin_list(self) -> list[str]:
-        return [origin.strip() for origin in self.ws_allowed_origins.split(",") if origin.strip()]
+        return [origin.strip().rstrip("/") for origin in self.ws_allowed_origins.split(",") if origin.strip()]
 
     model_config = SettingsConfigDict(
         env_file=Path(__file__).resolve().parents[2] / ".env",

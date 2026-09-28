@@ -19,7 +19,7 @@ engine_options = {
 if not settings.database_url.startswith("sqlite"):
     # Aiven's shared plans have a small connection limit. Keep one small,
     # reusable pool per Render instance instead of SQLAlchemy's default burst.
-    engine_options.update(pool_size=2, max_overflow=0, pool_timeout=10, pool_recycle=300, pool_use_lifo=True)
+    engine_options.update(pool_size=1, max_overflow=0, pool_timeout=30, pool_recycle=300, pool_use_lifo=True)
 engine = create_engine(settings.database_url, **engine_options)
 if engine.dialect.name == "sqlite":
     @event.listens_for(engine, "connect")
