@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: photo-gallery
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /health
+    envVars:
+      - key: DATABASE_URL
+        sync: false
