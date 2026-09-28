@@ -53,6 +53,8 @@ Use o endpoint Redis TCP/TLS, não uma URL REST. `rediss://` valida o certificad
 
 A API fornece `POST /images/{id}/likes`, `POST /images/{id}/comments` com JSON `{"body":"Olá!"}`, `GET /images/{id}/comments?limit=20&before_id=123` e WebSocket `/ws`. Sem Redis, as operações continuam salvas no PostgreSQL e a interface sincroniza a cada 30 segundos ativos. O `/health` é liveness: não garante conexão com Redis.
 
+No Render, selecione a branch `codex/realtime-post-interactions` no serviço. Se o log mencionar `branch main`, o serviço está implantando uma versão anterior. Em `WS_ALLOWED_ORIGINS`, use exatamente a origem pública do serviço, sem barra final, por exemplo `https://photo-gallery.onrender.com`.
+
 O startup executa a migração versionada aditiva antes de servir requisições. Ela preserva imagens e cria contadores, revisão e comentários. **Antes do primeiro deploy desta versão, faça backup do banco e valide a migração em uma cópia de teste.** PostgreSQL serializa migrações concorrentes com advisory lock. Para rollback, volte a versão da aplicação e mantenha as novas tabelas/colunas para não perder interações; não execute drop/reset.
 
 Backend:
