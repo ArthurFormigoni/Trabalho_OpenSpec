@@ -8,3 +8,9 @@ services:
     envVars:
       - key: DATABASE_URL
         sync: false
+      - key: REDIS_URL
+        sync: false
+      - key: REDIS_CHANNEL
+        value: photo-gallery:events
+      - key: WS_ALLOWED_ORIGINS
+        sync: false
